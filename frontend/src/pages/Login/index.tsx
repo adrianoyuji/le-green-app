@@ -4,20 +4,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import backgroundImage from "../../assets/images/background.jpg";
 import Logo from "src/components/Logo";
 import Footer from "src/components/layout/Footer";
-import api from "src/services/api";
 import { useHistory } from "react-router-dom";
 import ReducerType from "src/redux/types/ReducerType";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchUserFailure,
-  fetchUserRequest,
-  fetchUserSuccess,
-} from "src/redux/Auth/Auth.actions";
+import { signIn } from "src/redux/Auth/Auth.actions";
 
 const useStyles = makeStyles((theme) => ({
   loginBackground: {
     position: "relative",
-    height: window.innerHeight,
+    height: window.innerHeight || "100vh",
     width: "100vw",
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: "cover",
@@ -38,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
   loginBox: {
     padding: "1rem",
-    width: "35%",
+    width: "27.5%",
     height: "auto",
     backgroundColor: "white",
     zIndex: 2,
@@ -48,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
     "@media (max-width:800px)": {
-      width: "85%",
+      width: "80%",
     },
   },
   formStyles: {
@@ -74,20 +69,14 @@ const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const dispatch = useDispatch();
-  const auth = useSelector((state: ReducerType) => state.auth);
+  const { error, loading } = useSelector((state: ReducerType) => state.auth);
   const history = useHistory();
 
   const handleLoginSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    dispatch(fetchUserRequest());
-    try {
-      const { data } = await api.post("/auth/signin", { email, password });
-      dispatch(fetchUserSuccess(data.user));
-      history.push("/");
-    } catch (error) {
-      dispatch(fetchUserFailure(error.response.data.message));
-    }
+    dispatch(signIn({ email, password, history }));
   };
+
   return (
     <section className={classes.loginBackground}>
       <div className={classes.backgroundOverlay}></div>
@@ -97,7 +86,7 @@ const Login = () => {
           <span className={classes.inputSpacing}>
             Faça o login para acessar a plataforma
           </span>
-          {auth.error && <span className={classes.error}>{auth.error}</span>}
+          {error && <span className={classes.error}>{error}</span>}
 
           <TextField
             id="user-email"
@@ -116,7 +105,7 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {auth.loading ? (
+          {loading ? (
             <CircularProgress />
           ) : (
             <Button

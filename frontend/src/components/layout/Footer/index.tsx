@@ -4,6 +4,7 @@ const useStyles = makeStyles((theme) => ({
   footerStyle: {
     marginTop: "1em",
     color: "white",
+    zIndex: 2,
   },
 }));
 

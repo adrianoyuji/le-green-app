@@ -1,6 +1,6 @@
 import Login from "src/pages/Login";
 import NotFound from "src/pages/NotFound";
-import Home from "src/pages/Home";
+import Dashboard from "src/pages/Dashboard";
 const routes = [
   {
     id: "main",
@@ -9,10 +9,10 @@ const routes = [
     component: () => <div>Home</div>,
   },
   {
-    id: "home",
-    path: "/home",
+    id: "dashboard",
+    path: "/dashboard",
     protected: true,
-    component: () => <Home />,
+    component: () => <Dashboard />,
   },
   {
     id: "login",
