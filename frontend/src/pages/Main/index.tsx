@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 
 const Main = () => {
-  const user = useSelector((state: ReducerType) => state.auth.user);
+  const auth = useSelector((state: ReducerType) => state.auth);
 
   return (
     <Router>
@@ -17,7 +17,7 @@ const Main = () => {
         {routes.map((route) => (
           <Route key={route.id} exact path={route.path}>
             {route.protected ? (
-              user.authorized ? (
+              auth.isSigned ? (
                 route.component
               ) : (
                 <Redirect to="/login" />

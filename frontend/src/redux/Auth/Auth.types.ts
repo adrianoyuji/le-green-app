@@ -10,8 +10,10 @@ export interface RemoveUser {
 }
 
 export interface Auth {
-  user: User;
+  user: User | null;
   loading: boolean;
+  isSigned: boolean;
+  error: string;
 }
 
 export type AuthActionTypes = SetUser | RemoveUser;
